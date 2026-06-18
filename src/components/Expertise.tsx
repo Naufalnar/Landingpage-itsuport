@@ -30,7 +30,7 @@ export default function Expertise({ onOpenConsultation }: ExpertiseProps) {
   ];
 
   return (
-    <section className="py-20 bg-slate-50 border-b border-slate-200" id="layanan">
+    <section className="py-20 bg-slate-50 border-b border-slate-200" id="tim">
       <div className="max-w-[1200px] mx-auto px-6">
         {/* Header Block with Grid Flex */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6" id="expertise-header">
