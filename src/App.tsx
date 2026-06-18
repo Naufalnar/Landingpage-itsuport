@@ -6,9 +6,11 @@ import Expertise from "./components/Expertise";
 import ConsultationDrawer from "./components/ConsultationDrawer";
 import AdminPanel from "./components/AdminPanel";
 import Footer from "./components/Footer";
-import { MessageSquare, Settings, Database, ArrowRight } from "lucide-react";
+import SmeDetail from "./components/SmeDetail";
+import { MessageSquare, Settings, Database, ArrowRight, Sparkles } from "lucide-react";
 
 export default function App() {
+  const [view, setView] = useState<"home" | "umkm-detail">("home");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [adminOpen, setAdminOpen] = useState(false);
   const [selectedService, setSelectedService] = useState("Konsultasi Umum");
@@ -30,20 +32,65 @@ export default function App() {
     <div className="min-h-screen bg-[#f7f9fb] text-[#191c1e] font-sans antialiased selection:bg-blue-100 selection:text-blue-900 flex flex-col justify-between" id="app-root-container">
       {/* Top Main Navigation Bar */}
       <Navbar
+        currentView={view}
+        onNavigate={(targetView) => setView(targetView)}
         onOpenConsultation={handleOpenConsultation}
         onOpenAdmin={() => setAdminOpen(true)}
       />
 
+      {/* Special Promo Link Banner for Easy Navigation */}
+      {view === "home" ? (
+        <div className="bg-gradient-to-r from-blue-700 to-blue-600 text-white text-xs font-semibold py-2 px-6 flex justify-between items-center gap-4 shadow-sm z-30" id="sme-promo-bar">
+          <div className="flex items-center gap-2 max-w-[1200px] mx-auto w-full justify-center text-center">
+            <Sparkles className="w-3.5 h-3.5 text-blue-200 animate-pulse" />
+            <span>Mencari Audit &amp; Rekomendasi Infrastruktur IT khusus segmen UMKM?</span>
+            <button 
+              onClick={() => {
+                setView("umkm-detail");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              className="underline text-blue-100 hover:text-white font-bold ml-1 cursor-pointer"
+            >
+              Lihat Detail Layanan UMKM &rarr;
+            </button>
+          </div>
+        </div>
+      ) : null}
+
       {/* Main Sections */}
-      <main className="flex-1 pt-18">
-        {/* Hero Banner Section */}
-        <Hero onOpenConsultation={handleOpenConsultation} />
+      <main className="flex-1">
+        {view === "home" ? (
+          <>
+            {/* Hero Banner Section */}
+            <Hero onOpenConsultation={handleOpenConsultation} />
 
-        {/* Pricing & Offers Sections */}
-        <Pricing onOpenConsultation={handleOpenConsultation} />
+            {/* Pricing & Offers Sections with detailed link */}
+            <div className="relative">
+              {/* Highlight Trigger inside original list */}
+              <div className="max-w-[1200px] mx-auto px-6 pt-8 text-center -mb-8">
+                <button 
+                  onClick={() => {
+                     setView("umkm-detail");
+                     window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#004ac6] bg-blue-50 hover:bg-blue-100 border border-blue-200 px-4 py-1.5 rounded-full cursor-pointer transition shadow-xs"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Lihat Live Preview &amp; Detail Layanan Segmen UMKM &rarr;
+                </button>
+              </div>
+              <Pricing onOpenConsultation={handleOpenConsultation} />
+            </div>
 
-        {/* Service Divisions & Expert Members */}
-        <Expertise onOpenConsultation={handleOpenConsultation} />
+            {/* Service Divisions & Expert Members */}
+            <Expertise onOpenConsultation={handleOpenConsultation} />
+          </>
+        ) : (
+          <SmeDetail 
+            onBackToHome={() => setView("home")} 
+            onOpenConsultation={handleOpenConsultation} 
+          />
+        )}
       </main>
 
       {/* Structured Informational Footer */}

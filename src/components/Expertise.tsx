@@ -1,33 +1,62 @@
 import React from "react";
-import { ClipboardCheck, ShoppingCart, Wrench, Terminal, CheckCircle2 } from "lucide-react";
+import { Mail, Link2, Share2, Camera, Code } from "lucide-react";
 
 interface ExpertiseProps {
   onOpenConsultation: (service: string) => void;
 }
 
 export default function Expertise({ onOpenConsultation }: ExpertiseProps) {
-  const expertises = [
+  const teamMembers = [
     {
-      title: "Tim Audit & Konsultasi",
-      icon: <ClipboardCheck className="w-7 h-7 text-[#004ac6]" />,
-      items: ["Software License Audit", "Hardware Assessment", "IT Consultation"],
+      name: "Sarah Adeline",
+      role: "Team Audit & Konsultasi",
+      email: "sarah.a@itsupporthub.com",
+      imgUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuB8rb_oKOmaXBddZhDC8JXYDOXzuz6B3Z22b-EIP60GRxpWdyrBNPJb2qr-YhR-yTLtuz8eBfh_xYYmJgwzGTL5U1HKC82xGms-e1fEwToWq9JTM3DCqzLdNthgHQlT87DJyyDtezYyu8owPSIzqTmgiRwIs9bQxgv0Afgk9waiSpHH8wCdG9tJJd5X7ZJAdFyFpWwl7RAhu3aGg4JTcqlt8sLxj0nI5tX7ujlxttJ-IOC8uCpZV6RjNCuRCug8y6Vki2Rhd0hfMYA",
+      actions: ["link", "share"]
     },
     {
-      title: "Tim Procurement",
-      icon: <ShoppingCart className="w-7 h-7 text-[#004ac6]" />,
-      items: ["Hardware Sourcing", "Budget Optimization", "Delivery & Setup"],
+      name: "Budi Santoso",
+      role: "Team Procurement",
+      email: "budi.s@itsupporthub.com",
+      imgUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuA60EuWZTQ2rh9xLmUpsi3JGXkpwiXJmRpp_GmK5OWVocCYzEgfHjCrTZoVSKPSVQ_1XxcX6HYMJELQ3MSd_ggD96d9Egv9ypmfkS8D8IgLndloA2WtKUPgQ8kO9bQ3eUwoNZ1n8etnfApQ9nUYagxg6nzF_xqVIbLQl4ekmJrlUxgGAdk7HZD-3EXz6Jw3R4RDa2yR-SlMiXghziMhS5_VWICd1f-LT2-noa1A2rdaq20FQlGgtvHJhbx_JJdthL0q06L9cq-RGa4",
+      actions: ["link"]
     },
     {
-      title: "Tim Technical Support",
-      icon: <Wrench className="w-7 h-7 text-[#004ac6]" />,
-      items: ["Deep Cleaning", "Thermal Paste Refresh", "Hardware Fixing"],
+      name: "Dina Lestari",
+      role: "Team Technical Support",
+      email: "dina.l@itsupporthub.com",
+      imgUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuCLXC2117sZfk32PStfnuATIwrTfctovA7M5kIHZpIFo5MzrdRvj2Vd3VluNf_24LGNALnM-YPCmngvx6WbNg_Qviplec0twmb8ek2jsmRZ5fTRI_NuX2oFYnGlugeDyQwwqZkeQrTkyxpU5l9L4tq2sr2wJzfC3FCTkHs98CG0s7QbSZRxCYAkM3eG4RfVYhEJDNxAvZ7ziosgRjpXHphepSjIJHi_ctZOlSt8w_xP65QXFpzCNUboGRE9cIXAVY8bOqMc6Pei7QM",
+      actions: ["link", "camera"]
     },
     {
-      title: "Tim OS Specialist",
-      icon: <Terminal className="w-7 h-7 text-[#004ac6]" />,
-      items: ["Windows Setup Specialist", "Linux Deployment", "Driver Configuration"],
-    },
+      name: "Rizky Pratama",
+      role: "Team OS Specialist",
+      email: "rizky.p@itsupporthub.com",
+      imgUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBNXK-ovL49w3-y1N0SyRmasiEBVbogYo8l6A9649RHFV5djh3vOcwxCc-79w-_OGfiL93mTBvoN4POqEUJLSPqumzBavP9aHO9mDUYpsBzdNicKKDdzN6clC5oCCcN-o7yVnwqaqF92EKmNq3RXfZv5oQcd960NcPCs4z3QHFUruZv07ew4mwZGhtYW3VxRAq1C5AajXVKtExcdmWIvDhuBKedwRiMYau4wJFJhU6rPR3fvNTCefw3J-Ha-d_sw42cFlnU55Oze6Y",
+      actions: ["link", "code"]
+    }
   ];
+
+  const handleAction = (actionType: string, memberName: string) => {
+    if (actionType === "share") {
+      if (navigator.share) {
+        navigator.share({
+          title: `IT Support Hub - ${memberName}`,
+          text: `Perkenalkan ${memberName} dari IT Support Hub Spesialis Kami.`,
+          url: window.location.href
+        }).catch(console.error);
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert(`Tautan halaman profil ${memberName} disalin ke clipboard!`);
+      }
+    } else {
+      // Default action: scroll to consultation form
+      const element = document.getElementById("booking-section") || document.getElementById("harga");
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
 
   return (
     <section className="py-20 bg-slate-50 border-b border-slate-200" id="tim">
@@ -47,40 +76,83 @@ export default function Expertise({ onOpenConsultation }: ExpertiseProps) {
           </p>
         </div>
 
-        {/* 4 Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8" id="expertise-grid">
-          {expertises.map((exp, idx) => (
+        {/* 4 Cards Grid with profiles from image prompt */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8" id="expertise-grid">
+          {teamMembers.map((member, idx) => (
             <div
               key={idx}
-              onClick={() => onOpenConsultation(exp.title)}
-              className="group bg-white p-8 rounded-xl border border-slate-200 hover:border-[#004ac6] hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between"
-              id={`expertise-card-${idx}`}
+              className="group bg-white p-4 rounded-xl border border-slate-200 hover:border-[#004ac6] hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+              id={`team-member-${idx}`}
             >
               <div>
-                {/* Icon Container */}
-                <div className="w-14 h-14 bg-gradient-to-br from-blue-50 to-slate-100 rounded-lg flex items-center justify-center mb-6 group-hover:from-[#004ac6] group-hover:to-blue-700 group-hover:text-white transition-all duration-300">
-                  <div className="group-hover:scale-110 group-hover:text-white text-[#004ac6] transition-all">
-                    {exp.icon}
-                  </div>
+                {/* Photo Container - matching mockup but with real img tag! */}
+                <div className="aspect-square w-full rounded-lg overflow-hidden border border-slate-200 mb-4 bg-slate-100">
+                  <img
+                    src={member.imgUrl}
+                    alt={member.name}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    referrerPolicy="no-referrer"
+                  />
                 </div>
 
-                <h3 className="font-sans font-bold text-xl text-slate-900 mb-4 group-hover:text-[#004ac6] transition-colors">
-                  {exp.title}
-                </h3>
+                <div className="mb-4">
+                  <h3 className="font-sans font-bold text-lg text-slate-900 mb-0.5">
+                    {member.name}
+                  </h3>
+                  <p className="text-[#004ac6] font-sans font-semibold text-xs">
+                    {member.role}
+                  </p>
+                </div>
 
-                <ul className="space-y-3.5 mb-6">
-                  {exp.items.map((item, idy) => (
-                    <li key={idy} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-4.5 h-4.5 text-[#004ac6] shrink-0 mt-0.5" />
-                      <span className="text-slate-600 text-sm font-medium">{item}</span>
-                    </li>
-                  ))}
-                </ul>
+                {/* Email details with Mail Icon */}
+                <div className="space-y-3 mb-4">
+                  <div className="flex items-center gap-2 text-slate-500 hover:text-[#004ac6] transition">
+                    <Mail className="w-4 h-4 text-slate-400 shrink-0" />
+                    <a href={`mailto:${member.email}`} className="text-xs font-medium truncate max-w-full">
+                      {member.email}
+                    </a>
+                  </div>
+                </div>
               </div>
 
-              {/* Little interactive select text */}
-              <div className="text-xs font-semibold text-[#004ac6] opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 self-end">
-                Pilih Tim Ini untuk Konsultasi &rarr;
+              {/* Bottom Actions to Match design exactly */}
+              <div className="flex gap-2 pt-2 border-t border-slate-100 mt-2">
+                {member.actions.includes("link") && (
+                  <button
+                    onClick={() => handleAction("link", member.name)}
+                    className="w-8 h-8 bg-slate-50 hover:bg-blue-50 text-[#004ac6] hover:text-blue-700 rounded-full flex items-center justify-center transition border border-slate-100 cursor-pointer"
+                    title="Konsultasi langsung"
+                  >
+                    <Link2 className="w-4 h-4" />
+                  </button>
+                )}
+                {member.actions.includes("share") && (
+                  <button
+                    onClick={() => handleAction("share", member.name)}
+                    className="w-8 h-8 bg-slate-50 hover:bg-blue-50 text-[#004ac6] hover:text-blue-700 rounded-full flex items-center justify-center transition border border-slate-100 cursor-pointer"
+                    title="Bagikan Profil"
+                  >
+                    <Share2 className="w-4 h-4" />
+                  </button>
+                )}
+                {member.actions.includes("camera") && (
+                  <button
+                    onClick={() => handleAction("camera", member.name)}
+                    className="w-8 h-8 bg-slate-50 hover:bg-blue-50 text-[#004ac6] hover:text-blue-700 rounded-full flex items-center justify-center transition border border-slate-100 cursor-pointer"
+                    title="Spesialis Instalasi kamera & hardware"
+                  >
+                    <Camera className="w-4 h-4" />
+                  </button>
+                )}
+                {member.actions.includes("code") && (
+                  <button
+                    onClick={() => handleAction("code", member.name)}
+                    className="w-8 h-8 bg-slate-50 hover:bg-blue-50 text-[#004ac6] hover:text-blue-700 rounded-full flex items-center justify-center transition border border-slate-100 cursor-pointer"
+                    title="Spesialis Konfigurasi CLI & Scripting"
+                  >
+                    <Code className="w-4 h-4" />
+                  </button>
+                )}
               </div>
             </div>
           ))}

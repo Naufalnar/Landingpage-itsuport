@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { HelpCircle, ChevronRight } from "lucide-react";
 
 interface NavbarProps {
+  currentView?: "home" | "umkm-detail";
+  onNavigate?: (view: "home" | "umkm-detail") => void;
   onOpenConsultation: (service?: string) => void;
   onOpenAdmin: () => void;
 }
 
-export default function Navbar({ onOpenConsultation, onOpenAdmin }: NavbarProps) {
+export default function Navbar({ currentView = "home", onNavigate, onOpenConsultation, onOpenAdmin }: NavbarProps) {
   const [activeSection, setActiveSection] = useState("layanan");
 
   const scrollToSection = (id: string) => {
@@ -26,7 +28,27 @@ export default function Navbar({ onOpenConsultation, onOpenAdmin }: NavbarProps)
     }
   };
 
+  const handleLogoClick = () => {
+    if (onNavigate) {
+      onNavigate("home");
+    }
+    setActiveSection("layanan");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleLinkClick = (sectionId: string) => {
+    if (onNavigate && currentView !== "home") {
+      onNavigate("home");
+    }
+    // Wait for the home view to render before scrolling
+    setTimeout(() => {
+      scrollToSection(sectionId);
+    }, 100);
+  };
+
   useEffect(() => {
+    if (currentView !== "home") return;
+
     const handleScroll = () => {
       const scrollPos = window.scrollY + 120;
       
@@ -44,17 +66,14 @@ export default function Navbar({ onOpenConsultation, onOpenAdmin }: NavbarProps)
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [currentView]);
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-40 bg-white/90 backdrop-blur-md border-b border-slate-200">
+    <nav className="fixed top-0 left-0 w-full z-45 bg-white/90 backdrop-blur-md border-b border-slate-200">
       <div className="max-w-[1200px] mx-auto px-6 h-18 flex justify-between items-center">
         {/* Brand */}
         <button 
-          onClick={() => {
-            setActiveSection("layanan");
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
+          onClick={handleLogoClick}
           className="font-sans font-bold text-2xl text-[#004ac6] hover:opacity-90 transition-opacity cursor-pointer focus:outline-hidden"
           id="nav-logo-button"
         >
@@ -64,9 +83,9 @@ export default function Navbar({ onOpenConsultation, onOpenAdmin }: NavbarProps)
         {/* Links */}
         <div className="hidden md:flex gap-8 items-center">
           <button
-            onClick={() => scrollToSection("tim")}
+            onClick={() => handleLinkClick("harga")}
             className={`font-sans font-semibold text-sm pb-1 transition-all focus:outline-hidden cursor-pointer ${
-              activeSection === "tim"
+              activeSection === "layanan" && currentView === "home"
                 ? "text-[#004ac6] border-b-2 border-[#004ac6]"
                 : "text-slate-500 hover:text-[#004ac6] hover:border-b-2 hover:border-[#004ac6] border-b-2 border-transparent"
             }`}
@@ -75,9 +94,9 @@ export default function Navbar({ onOpenConsultation, onOpenAdmin }: NavbarProps)
             Layanan
           </button>
           <button
-            onClick={() => scrollToSection("harga")}
+            onClick={() => handleLinkClick("harga")}
             className={`font-sans font-semibold text-sm pb-1 transition-all focus:outline-hidden cursor-pointer ${
-              activeSection === "harga"
+              activeSection === "harga" && currentView === "home"
                 ? "text-[#004ac6] border-b-2 border-[#004ac6]"
                 : "text-slate-500 hover:text-[#004ac6] hover:border-b-2 hover:border-[#004ac6] border-b-2 border-transparent"
             }`}
@@ -86,9 +105,9 @@ export default function Navbar({ onOpenConsultation, onOpenAdmin }: NavbarProps)
             Harga
           </button>
           <button
-            onClick={() => scrollToSection("tim")}
+            onClick={() => handleLinkClick("tim")}
             className={`font-sans font-semibold text-sm pb-1 transition-all focus:outline-hidden cursor-pointer ${
-              activeSection === "tim"
+              activeSection === "tim" && currentView === "home"
                 ? "text-[#004ac6] border-b-2 border-[#004ac6]"
                 : "text-slate-500 hover:text-[#004ac6] hover:border-b-2 hover:border-[#004ac6] border-b-2 border-transparent"
             }`}

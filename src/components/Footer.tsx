@@ -1,5 +1,5 @@
 import React from "react";
-import { Share2, ArrowUp, Database, Calendar } from "lucide-react";
+import { ArrowUp, Database } from "lucide-react";
 
 interface FooterProps {
   onOpenConsultation: (service?: string) => void;
@@ -14,95 +14,51 @@ export default function Footer({ onOpenConsultation, onOpenAdmin }: FooterProps)
     });
   };
 
-  const handleShare = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (navigator.share) {
-      navigator.share({
-        title: "IT Support Hub",
-        text: "Layanan infrastruktur dan solusi IT terpercaya untuk Anda.",
-        url: window.location.href,
-      }).catch(console.error);
-    } else {
-      alert("Tautan aplikasi telah disalin ke clipboard!");
-      navigator.clipboard.writeText(window.location.href);
-    }
-  };
-
   return (
-    <footer className="bg-white border-t border-slate-200 py-16 text-slate-600 font-sans" id="footer-section">
-      <div className="max-w-[1200px] mx-auto px-6">
-        {/* Main Columns Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12" id="footer-columns">
-          {/* Brand Info */}
-          <div className="space-y-4 md:col-span-2">
-            <h3 className="font-sans font-bold text-2xl text-[#004ac6]">
-              IT Support Hub
-            </h3>
-            <p className="text-slate-500 font-sans text-sm leading-relaxed max-w-sm">
-              Penyedia layanan infrastruktur dan dukungan IT terintegrasi dengan standar kualitas tinggi untuk efisiensi operasional bisnis Anda.
-            </p>
-          </div>
-
-          {/* Links 1: Perusahaan */}
-          <div className="space-y-3">
-            <h4 className="font-sans font-bold text-sm text-slate-900 uppercase tracking-wider mb-2">
-              Perusahaan
-            </h4>
-            <ul className="space-y-2.5 text-sm font-medium">
-              <li>
-                <a href="#layanan" className="hover:text-[#004ac6] transition">Tentang Kami</a>
-              </li>
-              <li>
-                <button onClick={() => onOpenConsultation("Hubungi Kami")} className="hover:text-[#004ac6] text-left transition cursor-pointer">Kontak Kami</button>
-              </li>
-              <li>
-                <button onClick={onOpenAdmin} className="text-left text-slate-500 hover:text-indigo-600 transition flex items-center gap-1 cursor-pointer">
-                  <Database className="w-3.5 h-3.5" /> Konfigurasi Neon DB
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          {/* Links 2: Layanan */}
-          <div className="space-y-3">
-            <h4 className="font-sans font-bold text-sm text-slate-900 uppercase tracking-wider mb-2">
-              Layanan
-            </h4>
-            <ul className="space-y-2.5 text-sm font-medium">
-              <li>
-                <a href="#harga" className="hover:text-[#004ac6] transition">Daftar Harga</a>
-              </li>
-              <li>
-                <button onClick={() => onOpenConsultation("Konsultasi Umum")} className="hover:text-[#004ac6] text-left transition cursor-pointer">Konsultasi Gratis</button>
-              </li>
-              {/* Share button */}
-              <li>
-                <button
-                  onClick={handleShare}
-                  className="flex items-center gap-1.5 hover:text-[#004ac6] text-left transition cursor-pointer"
-                >
-                  <Share2 className="w-4 h-4 text-[#004ac6]" /> Bagikan Tautan
-                </button>
-              </li>
-            </ul>
+    <footer className="bg-white border-t border-slate-200 py-8 text-slate-500 text-xs font-sans" id="footer-section">
+      <div className="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        {/* Left branding and basic socials */}
+        <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 text-center sm:text-left">
+          <span className="font-sans font-bold text-base text-[#004ac6]">
+            IT Support Hub
+          </span>
+          <div className="flex gap-4 text-slate-400 font-medium">
+            <a href="#" className="hover:text-[#004ac6] transition">Facebook</a>
+            <a href="#" className="hover:text-[#004ac6] transition">LinkedIn</a>
+            <a href="#" className="hover:text-[#004ac6] transition">Twitter</a>
           </div>
         </div>
+        
+        {/* Right copyright, legals and db link */}
+        <div className="flex flex-wrap gap-x-4 gap-y-2 items-center justify-center text-slate-400 font-medium">
+          <span>© 2024 IT Support Hub. Seluruh hak cipta dilindungi.</span>
+          <span className="hidden md:inline text-slate-200">|</span>
+          <a href="#" className="hover:text-[#004ac6] underline transition">Privacy Policy</a>
+          <a href="#" className="hover:text-[#004ac6] underline transition">Terms of Service</a>
+          
+          <span className="hidden md:inline text-slate-200">|</span>
+          <button 
+            onClick={() => onOpenConsultation("Hubungi Kami")} 
+            className="hover:text-[#004ac6] transition font-bold text-slate-500 cursor-pointer"
+          >
+            Konsultasi Gratis
+          </button>
+          
+          <button 
+            onClick={onOpenAdmin} 
+            className="text-slate-400 hover:text-indigo-600 transition flex items-center gap-1 cursor-pointer font-bold ml-1"
+            title="Klik untuk test query atau setting Neon Database Anda"
+          >
+            <Database className="w-3.5 h-3.5" /> DB Config
+          </button>
 
-        {/* Bottom copyright list */}
-        <div className="mt-16 pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4 text-center text-xs text-slate-400 font-medium">
-          <p>© 2024 IT Support Hub. Solusi Teknologi Terpercaya. Di-deploy lewat Vercel.</p>
-
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-[#004ac6] underline transition">Privacy Policy</a>
-            <a href="#" className="hover:text-[#004ac6] underline transition">Terms of Service</a>
-            <button
-              onClick={scrollTop}
-              className="inline-flex items-center gap-1 hover:text-[#004ac6] transition cursor-pointer focus:outline-hidden"
-              title="Scroll ke atas"
-            >
-              Kembali ke Atas <ArrowUp className="w-3.5 h-3.5" />
-            </button>
-          </div>
+          <button
+            onClick={scrollTop}
+            className="text-slate-400 hover:text-[#004ac6] transition flex items-center gap-0.5 ml-2 cursor-pointer"
+            title="Scroll ke atas"
+          >
+            Top <ArrowUp className="w-3 h-3" />
+          </button>
         </div>
       </div>
     </footer>

@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import pg from "pg";
 import dotenv from "dotenv";
@@ -27,11 +28,43 @@ const inMemoryConsultations: Consultation[] = [];
 
 // Lazy PG client helper
 let pool: pg.Pool | null = null;
+let lastUsedUrl: string | null = null;
 let lastDbFailureTime = 0; // Cooldown tracker
 const DB_FAILURE_COOLDOWN_MS = 45000; // 45s cooldown on error to avoid spamming connection/DNS timeouts
 
+function getDatabaseUrl(): string | null {
+  let dbUrl = process.env.DATABASE_URL;
+
+  if (!dbUrl || dbUrl.trim() === "" || dbUrl.trim() === "base") {
+    try {
+      const dotenvPath = path.join(process.cwd(), ".env");
+      if (fs.existsSync(dotenvPath)) {
+        const envContent = fs.readFileSync(dotenvPath, "utf-8");
+        const match = envContent.match(/DATABASE_URL=["']?([^"'\r\n]+)["']?/);
+        if (match && match[1]) {
+          dbUrl = match[1];
+        }
+      }
+    } catch (e) {}
+
+    if (!dbUrl || dbUrl.trim() === "" || dbUrl.trim() === "base") {
+      try {
+        const dotenvExamplePath = path.join(process.cwd(), ".env.example");
+        if (fs.existsSync(dotenvExamplePath)) {
+          const envContent = fs.readFileSync(dotenvExamplePath, "utf-8");
+          const match = envContent.match(/DATABASE_URL=["']?([^"'\r\n]+)["']?/);
+          if (match && match[1]) {
+            dbUrl = match[1];
+          }
+        }
+      } catch (e) {}
+    }
+  }
+  return dbUrl ? dbUrl.trim() : null;
+}
+
 function getPool(): { pool: pg.Pool | null; error: string | null } {
-  const dbUrl = process.env.DATABASE_URL;
+  const dbUrl = getDatabaseUrl();
   if (!dbUrl) {
     return { pool: null, error: "DATABASE_URL environment variable is missing" };
   }
@@ -50,6 +83,13 @@ function getPool(): { pool: pg.Pool | null; error: string | null } {
     return { pool: null, error: "DATABASE_URL has invalid placeholder characters." };
   }
 
+  if (pool && lastUsedUrl !== trimmed) {
+    try {
+      pool.end();
+    } catch (e) {}
+    pool = null;
+  }
+
   if (!pool) {
     try {
       pool = new pg.Pool({
@@ -59,6 +99,7 @@ function getPool(): { pool: pg.Pool | null; error: string | null } {
           rejectUnauthorized: false // Neon requires SSL
         }
       });
+      lastUsedUrl = trimmed;
     } catch (err: any) {
       return { pool: null, error: err.message || "Failed to initialize PG Pool" };
     }
@@ -73,7 +114,7 @@ function isDbInCooldown(): boolean {
 
 // 1. Get database status
 app.get("/api/db-status", async (req, res) => {
-  const dbUrl = process.env.DATABASE_URL;
+  const dbUrl = getDatabaseUrl();
   if (!dbUrl) {
     return res.json({
       connected: false,
