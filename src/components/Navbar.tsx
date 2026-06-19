@@ -5,10 +5,9 @@ interface NavbarProps {
   currentView?: "home" | "umkm-detail";
   onNavigate?: (view: "home" | "umkm-detail") => void;
   onOpenConsultation: (service?: string) => void;
-  onOpenAdmin: () => void;
 }
 
-export default function Navbar({ currentView = "home", onNavigate, onOpenConsultation, onOpenAdmin }: NavbarProps) {
+export default function Navbar({ currentView = "home", onNavigate, onOpenConsultation }: NavbarProps) {
   const [activeSection, setActiveSection] = useState("layanan");
 
   const scrollToSection = (id: string) => {
@@ -114,13 +113,6 @@ export default function Navbar({ currentView = "home", onNavigate, onOpenConsult
             id="nav-tim-link"
           >
             Tim
-          </button>
-          <button
-            onClick={onOpenAdmin}
-            className="font-sans font-semibold text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 px-2.5 py-1 rounded-md transition focus:outline-hidden cursor-pointer"
-            id="nav-admin-link"
-          >
-            Admin Panel
           </button>
         </div>
 

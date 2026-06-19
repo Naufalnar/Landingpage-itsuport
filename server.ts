@@ -230,7 +230,7 @@ app.post("/api/consultations", async (req, res) => {
 
         return res.json({
           success: true,
-          message: "Yay! Konsultasi berhasil dibuat langsung di Neon Database.",
+          message: "Permintaan konsultasi Anda berhasil dikirim ke server IT Support Hub.",
           data: result.rows[0]
         });
       } catch (err: any) {
@@ -257,7 +257,7 @@ app.post("/api/consultations", async (req, res) => {
 
   return res.json({
     success: true,
-    message: "Konsultasi disimpan di penyimpanan lokal (Database Neon belum tersambung).",
+    message: "Permintaan konsultasi Anda telah berhasil kami terima.",
     data: newConsultation,
     fallback: true
   });

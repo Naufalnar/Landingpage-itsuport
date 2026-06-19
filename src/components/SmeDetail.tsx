@@ -55,7 +55,7 @@ export default function SmeDetail({ onBackToHome, onOpenConsultation }: SmeDetai
       const data = await response.json();
       
       setLoading(false);
-      setSuccessMsg("Selamat! Permintaan konsultasi Anda telah disimpan ke Neon DB.");
+      setSuccessMsg("Selamat! Permintaan konsultasi Anda berhasil diproses. Membuka WhatsApp untuk terhubung...");
 
       // Direct to WhatsApp
       const whatsappNumber = "6281234567890"; // Ganti nomor di sini
@@ -95,20 +95,25 @@ export default function SmeDetail({ onBackToHome, onOpenConsultation }: SmeDetai
   return (
     <div className="bg-[#f7f9fb] text-[#191c1e] font-sans" id="sme-detail-panel">
       {/* Banner / Navigation Breadcrumb */}
-      <div className="bg-white border-b border-slate-200 py-3 px-6">
-        <div className="max-w-[1200px] mx-auto flex items-center gap-3">
-          <button 
-            onClick={onBackToHome}
-            className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-[#004ac6] transition cursor-pointer"
-            id="back-to-home-btn"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Kembali ke Beranda
-          </button>
-          <span className="text-slate-300">/</span>
-          <span className="text-xs font-bold text-[#004ac6] bg-blue-50 px-2 py-0.5 rounded">
-            Detail Layanan UMKM
-          </span>
+      <div className="bg-white border-b border-slate-200 py-4.5 px-6 shadow-xs sticky top-18 z-20">
+        <div className="max-w-[1200px] mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={onBackToHome}
+              className="flex items-center gap-2 text-sm font-bold text-slate-700 bg-slate-100 hover:bg-blue-50 hover:text-[#004ac6] px-4 py-2.5 rounded-lg border border-slate-200 transition cursor-pointer shadow-xs active:scale-95"
+              id="back-to-home-btn"
+            >
+              <ArrowLeft className="w-4 h-4 text-slate-500" />
+              &larr; Kembali ke Beranda (Halaman Utama)
+            </button>
+            <span className="text-slate-300 hidden sm:inline">/</span>
+            <span className="text-xs font-bold text-[#004ac6] bg-blue-50 px-2.5 py-1 rounded-md hidden sm:inline">
+              Detail Layanan Audit UMKM
+            </span>
+          </div>
+          <div className="text-xs text-slate-400 font-medium">
+            Melihat: Segmen Layanan Khusus UMKM
+          </div>
         </div>
       </div>
 

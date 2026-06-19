@@ -3,10 +3,9 @@ import { ArrowUp, Database } from "lucide-react";
 
 interface FooterProps {
   onOpenConsultation: (service?: string) => void;
-  onOpenAdmin: () => void;
 }
 
-export default function Footer({ onOpenConsultation, onOpenAdmin }: FooterProps) {
+export default function Footer({ onOpenConsultation }: FooterProps) {
   const scrollTop = () => {
     window.scrollTo({
       top: 0,
@@ -42,14 +41,6 @@ export default function Footer({ onOpenConsultation, onOpenAdmin }: FooterProps)
             className="hover:text-[#004ac6] transition font-bold text-slate-500 cursor-pointer"
           >
             Konsultasi Gratis
-          </button>
-          
-          <button 
-            onClick={onOpenAdmin} 
-            className="text-slate-400 hover:text-indigo-600 transition flex items-center gap-1 cursor-pointer font-bold ml-1"
-            title="Klik untuk test query atau setting Neon Database Anda"
-          >
-            <Database className="w-3.5 h-3.5" /> DB Config
           </button>
 
           <button
